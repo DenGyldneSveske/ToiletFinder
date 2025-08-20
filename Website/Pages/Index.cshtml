@@ -1,0 +1,48 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<form method="post">
+    <label>
+        Latitude: <input asp-for="SearchParams.Latitude" type="number" step="any" />
+    </label>
+    <label>
+        Longitude: <input asp-for="SearchParams.Longtitude" type="number" step="any" />
+    </label>
+    <br />
+    <input type="submit" value="Search" />
+</form>
+
+@if (Model.Restrooms != null && Model.Restrooms.Any())
+{
+    <h2>Nearby Restrooms</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Accessible</th>
+                <th>Unisex</th>
+                <th>Directions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var r in Model.Restrooms)
+            {
+                <tr>
+                    <td>@r.Name</td>
+                    <td>
+                        <a target="_blank" href="https://www.google.com/maps/search/?api=1&query=@Uri.EscapeDataString(r.Street + ", " + r.City + ", " + r.State)">
+                            @r.Street, @r.City, @r.State
+                        </a>
+                    </td>
+                    <td>@(r.Accessible ? "Yes" : "No")</td>
+                    <td>@(r.Unisex ? "Yes" : "No")</td>
+                    <td>@r.Directions</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
